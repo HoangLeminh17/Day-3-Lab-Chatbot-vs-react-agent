@@ -4,5 +4,9 @@ __pycache__/
 *.log
 .DS_Store
 models/
+<<<<<<< HEAD
 report/individual_reports/TEMPLATE_INDIVIDUAL_REPORT.md
 report/individual_reports/REPORT_*.md
+=======
+report/
+>>>>>>> origin/hau
