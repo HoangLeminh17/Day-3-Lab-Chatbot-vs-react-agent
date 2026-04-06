@@ -39,6 +39,7 @@ def main():
     
     # Define tools (empty for now - add your tools here)
     tools = [
+
         # Example:
         # {
         #     "name": "search_recipes",
