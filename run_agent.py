@@ -39,10 +39,6 @@ def main():
     
     # Define tools (empty for now - add your tools here)
     tools = [
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/hau
         # Example:
         # {
         #     "name": "search_recipes",
