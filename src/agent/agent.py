@@ -25,15 +25,24 @@ class ReActAgent:
         """
         tool_descriptions = "\n".join([f"- {t['name']}: {t['description']}" for t in self.tools])
         return f"""
-        You are an intelligent assistant. You have access to the following tools:
+        You are an expert in cuisine, cooking, and nutrition.     
+        Here is a list of tools you can use to answer user queries: 
         {tool_descriptions}
-
+        ## Instructions:
+        Your task is to analyze cooking ingredients, provide cooking instructions, and give related information about food and nutrition.
+            
+        ## Constraints
+        - You can call tools a maximum of 1 times
+        
+        ## OUTPUT FORMAT:
         Use the following format:
         Thought: your line of reasoning.
         Action: tool_name(arguments)
         Observation: result of the tool call.
         ... (repeat Thought/Action/Observation if needed)
         Final Answer: your final response.
+        EXAMPLE:
+        
         """
 
     def run(self, user_input: str) -> str:
