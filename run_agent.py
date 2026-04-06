@@ -14,6 +14,14 @@ from src.agent.agent import ReActAgent
 from src.core.gemini_provider import GeminiProvider
 from src.core.openai_provider import OpenAIProvider
 from src.core.local_provider import LocalProvider
+from src.tools.cooking_time import estimate_cooking_time
+
+
+def search_web(query: str) -> str:
+    """Lazy import to avoid startup failure when optional search deps are missing."""
+    from src.tools.searching import search
+
+    return search(query)
 
 def main():
     # Load environment variables
@@ -21,7 +29,7 @@ def main():
     
     # Get config
     provider = os.getenv("DEFAULT_PROVIDER", "google")
-    model = os.getenv("DEFAULT_MODEL", "gemini-1.5-flash")
+    model = os.getenv("DEFAULT_MODEL", "gemini-2.5-flash")
     local_path = os.getenv("LOCAL_MODEL_PATH", "./models/Phi-3-mini-4k-instruct-q4.gguf")
     
     # Initialize LLM provider
@@ -39,12 +47,16 @@ def main():
     
     # Define tools (empty for now - add your tools here)
     tools = [
-        # Example:
-        # {
-        #     "name": "search_recipes",
-        #     "description": "Search for recipes by name or cuisine.",
-        #     "fn": search_recipes_function
-        # }
+        {
+            "name": "estimate_cooking_time",
+            "description": "Estimate cooking and prep time for a dish. Use when the user asks how long a dish takes to cook, boil, bake, fry, steam, or stew. Arguments: dish_type, ingredients_count, servings, technique, complexity, marinate_minutes, needs_thawing, needs_preheat.",
+            "fn": estimate_cooking_time,
+        },
+        {
+            "name": "search",
+            "description": "Search the web for cooking facts, nutrition references, or recipe ideas when specific information is needed. Argument: query.",
+            "fn": search_web,
+        },
     ]
     
     # Create agent
