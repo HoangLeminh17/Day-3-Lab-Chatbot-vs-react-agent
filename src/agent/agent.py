@@ -25,15 +25,24 @@ class ReActAgent:
         """
         tool_descriptions = "\n".join([f"- {t['name']}: {t['description']}" for t in self.tools])
         return f"""
-        You are an intelligent assistant. You have access to the following tools:
+        You are an expert in cuisine, cooking, and nutrition.     
+        Here is a list of tools you can use to answer user queries: 
         {tool_descriptions}
-
+        ## Instructions:
+        Your task is to analyze cooking ingredients, provide cooking instructions, and give related information about food and nutrition.
+            
+        ## Constraints
+        - You can call tools a maximum of 1 times
+        
+        ## OUTPUT FORMAT:
         Use the following format:
         Thought: your line of reasoning.
         Action: tool_name(arguments)
         Observation: result of the tool call.
         ... (repeat Thought/Action/Observation if needed)
         Final Answer: your final response.
+        EXAMPLE:
+        
         """
 
     def run(self, user_input: str) -> str:
@@ -47,6 +56,7 @@ class ReActAgent:
         
         current_prompt = f"User Query: {user_input}\n\n"
         steps = 0
+        used_tools: List[str] = []
 
         while steps < self.max_steps:
             # Generate LLM response
@@ -57,14 +67,15 @@ class ReActAgent:
             final_match = re.search(r"Final Answer:\s*(.*)", result["content"], re.IGNORECASE | re.DOTALL)
             if final_match:
                 final_answer = final_match.group(1).strip()
-                logger.log_event("AGENT_END", {"steps": steps, "final_answer": final_answer})
-                return final_answer
+                logger.log_event("AGENT_END", {"steps": steps, "final_answer": final_answer, "tools_used": used_tools})
+                return self._attach_tool_usage(final_answer, used_tools)
             
             # Parse Action from result
             action_match = re.search(r"Action:\s*(\w+)\((.*?)\)", result["content"])
             if action_match:
                 tool_name = action_match.group(1)
                 args_str = action_match.group(2)
+                used_tools.append(tool_name)
 
                 # Execute tool
                 observation = self._execute_tool(tool_name, args_str)
@@ -73,13 +84,29 @@ class ReActAgent:
                 current_prompt += f"{result['content']}\nObservation: {observation}\n\n"
             else:
                 # No action found, return last response
-                logger.log_event("AGENT_END", {"steps": steps, "reason": "No action"})
-                return result["content"]
+                logger.log_event("AGENT_END", {"steps": steps, "reason": "No action", "tools_used": used_tools})
+                return self._attach_tool_usage(result["content"], used_tools)
         
             steps += 1
             
         logger.log_event("AGENT_END", {"steps": steps, "reason": "Max steps"})
-        return "Agent stopped: Max steps reached."
+        return self._attach_tool_usage("Agent stopped: Max steps reached.", used_tools)
+
+    def _attach_tool_usage(self, response: str, used_tools: List[str]) -> str:
+        """Attach a concise tool usage line to the final agent response."""
+        deduped = []
+        seen = set()
+        for tool in used_tools:
+            if tool not in seen:
+                deduped.append(tool)
+                seen.add(tool)
+
+        if deduped:
+            tool_line = f"Tools used: {', '.join(deduped)}"
+        else:
+            tool_line = "Tools used: none"
+
+        return f"{response}\n\n{tool_line}"
 
     def _execute_tool(self, tool_name: str, args: str) -> str:
         """
