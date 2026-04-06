@@ -16,9 +16,8 @@ from src.core.gemini_provider import GeminiProvider
 from src.core.openai_provider import OpenAIProvider
 from src.core.local_provider import LocalProvider
 from src.tools.voice_interaction import VoiceInteractionTool
-from src.tools.searching import search
-
 from src.tools.cooking_time import estimate_cooking_time
+from src.tools.similar_recipe_recommend import suggest_similar_by_tavily
 
 
 def search_web(query: str) -> str:
@@ -77,6 +76,11 @@ def main():
             "name": "search",
             "description": "Search the web for cooking facts, nutrition references, or recipe ideas when specific information is needed. Argument: query.",
             "fn": search_web,
+        },
+        {
+            "name": "suggest_similar_dishes",
+            "description": "Find dishes similar to the one the user asks about.",
+            "fn": suggest_similar_by_tavily,
         },
     ]
     
