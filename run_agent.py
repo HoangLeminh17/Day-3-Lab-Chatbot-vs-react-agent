@@ -15,6 +15,8 @@ from src.core.gemini_provider import GeminiProvider
 from src.core.openai_provider import OpenAIProvider
 from src.core.local_provider import LocalProvider
 from src.tools.cooking_time import estimate_cooking_time
+from src.tools.search_recipe import search_recipes
+from src.tools.unit_converter import unit_converter
 
 
 def search_web(query: str) -> str:
@@ -56,6 +58,17 @@ def main():
             "name": "search",
             "description": "Search the web for cooking facts, nutrition references, or recipe ideas when specific information is needed. Argument: query.",
             "fn": search_web,
+        },
+        {
+            "name": "unit_converter",
+            "description": "Convert between different cooking units (e.g., grams to cups). if you want to convert unit, you need pass the value, from_unit and to_unit as arguments to this tool. Example: unit_converter(100, 'grams', 'cups') "
+                           "You need use tool when user ask about convert unit in cooking",
+            "fn": unit_converter,
+        },
+        {
+            "name": "search_recipes",
+            "description": "Search for recipes based on a query related to cooking ingredients, dishes, or nutrition. You need pass the query as an argument about cooking ingredients or anything need a recipe to this tool.",
+            "fn": search_recipes,
         },
     ]
     

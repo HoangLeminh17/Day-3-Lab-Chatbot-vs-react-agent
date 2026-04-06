@@ -1,7 +1,12 @@
 import os
+import sys
 import time
 import google.generativeai as genai
 from typing import Dict, Any, Optional, Generator
+
+# Add the project root to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+
 from src.core.llm_provider import LLMProvider
 
 class GeminiProvider(LLMProvider):
