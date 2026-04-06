@@ -15,7 +15,6 @@ from src.core.gemini_provider import GeminiProvider
 from src.core.openai_provider import OpenAIProvider
 from src.core.local_provider import LocalProvider
 from src.tools.cooking_time import estimate_cooking_time
-from src.tools.search_recipe import search_recipes
 from src.tools.unit_converter import unit_converter
 
 
@@ -24,6 +23,13 @@ def search_web(query: str) -> str:
     from src.tools.searching import search
 
     return search(query)
+
+
+def search_recipes_tool(query: str) -> str:
+    """Lazy import recipe search tool to keep optional Tavily dependency optional at startup."""
+    from src.tools.search_recipe import search_recipes
+
+    return search_recipes(query)
 
 def main():
     # Load environment variables
@@ -68,7 +74,7 @@ def main():
         {
             "name": "search_recipes",
             "description": "Search for recipes based on a query related to cooking ingredients, dishes, or nutrition. You need pass the query as an argument about cooking ingredients or anything need a recipe to this tool.",
-            "fn": search_recipes,
+            "fn": search_recipes_tool,
         },
     ]
     
