@@ -1,8 +1,8 @@
 # Individual Report: Lab 3 - Chatbot vs ReAct Agent
 
-- **Student Name**: [Your Name Here]
-- **Student ID**: [Your ID Here]
-- **Date**: [Date Here]
+- **Student Name**: Lê Minh Hoàng
+- **Student ID**: 2A202600101
+- **Date**: 06/04/2025
 
 ---
 
@@ -10,9 +10,9 @@
 
 *Describe your specific contribution to the codebase (e.g., implemented a specific tool, fixed the parser, etc.).*
 
-- **Modules Implementated**: [e.g., `src/tools/search_tool.py`]
+- **Modules Implementated**: `src/agent/agent.py`
 - **Code Highlights**: [Copy snippets or link file lines]
-- **Documentation**: [Brief explanation of how your code interacts with the ReAct loop]
+- **Documentation**: Build core of ReAct loop
 
 ---
 
