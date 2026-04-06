@@ -5,3 +5,4 @@ __pycache__/
 .DS_Store
 models/
 report/individual_reports/REPORT_*.md
+report/individual_reports/TEMPLATE_INDIVIDUAL_REPORT.md
