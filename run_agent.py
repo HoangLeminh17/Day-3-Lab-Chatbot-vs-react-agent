@@ -6,6 +6,7 @@ Simple script to run the ReAct Agent as a chatbot.
 import os
 import sys
 from dotenv import load_dotenv
+from src.tools.similar_recipe_recommend import suggest_similar_by_tavily
 
 # Add src to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -13,7 +14,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from src.agent.agent import ReActAgent
 from src.core.gemini_provider import GeminiProvider
 from src.core.openai_provider import OpenAIProvider
-from src.core.local_provider import LocalProvider
+#from src.core.local_provider import LocalProvider
 
 def main():
     # Load environment variables
@@ -39,12 +40,11 @@ def main():
     
     # Define tools (empty for now - add your tools here)
     tools = [
-        # Example:
-        # {
-        #     "name": "search_recipes",
-        #     "description": "Search for recipes by name or cuisine.",
-        #     "fn": search_recipes_function
-        # }
+        {
+            "name": "suggest_similar_dishes",
+            "description": "Tìm các món ăn tương tự với món mà người dùng muốn tìm. ",
+            "fn": suggest_similar_by_tavily
+        }
     ]
     
     # Create agent
