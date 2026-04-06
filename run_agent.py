@@ -7,6 +7,9 @@ import os
 import sys
 from dotenv import load_dotenv
 
+from src.tools import unit_converter
+from src.tools import search_recipes
+
 # Add src to path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -39,13 +42,19 @@ def main():
     
     # Define tools (empty for now - add your tools here)
     tools = [
-
-        # Example:
-        # {
-        #     "name": "search_recipes",
-        #     "description": "Search for recipes by name or cuisine.",
-        #     "fn": search_recipes_function
-        # }
+        {
+            "name": "unit_converter",
+            "description": "Convert between different cooking units (e.g., grams to cups). if you want to convert unit, you need pass the value, from_unit and to_unit as arguments to this tool. Example: unit_converter(100, 'grams', 'cups') "
+                           "You need use tool when user ask about convert unit in cooking",
+            "fn": unit_converter
+        },
+        {
+            "name": "search_recipes",
+            "description": "Search for recipes based on a query related to cooking ingredients, dishes, or nutrition. You need pass the query as an argument about cooking ingredients or anything need a recipe to this tool.",
+            # Ép AI dùng biến query
+            "fn": search_recipes
+            # "fn": lambda x: f"Searching for recipes related to {x} (this is a placeholder function)."
+        }
     ]
     
     # Create agent
